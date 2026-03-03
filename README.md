@@ -9,16 +9,12 @@
 ## Run it (important for AJAX)
 AJAX requests usually fail when opening `index.html` with `file://`. Run a local server instead.
 
-### Option A: Python (if installed)
-From `f:\e-commerce`:
 
-```bash
-python -m http.server 5500
-```
 
 Then open `http://localhost:5500/` in your browser.
 
-### Option B: VS Code / Cursor “Live Server”
+### Option 
+A: VS Code / Cursor “Live Server”
 Install “Live Server”, then “Open with Live Server” on `index.html`.
 
 ## Files
