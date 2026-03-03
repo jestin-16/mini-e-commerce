@@ -35,7 +35,7 @@
     "id": "p1005",
     "name": "Noise-Isolating Earbuds",
     "price": 29.99,
-    "image": "https://picsum.photos/seed/earbuds/600/400",
+    "image": "https://i.pinimg.com/736x/10/ba/a1/10baa129a0a5b453afa183d6b6ea9e01.jpg",
     "category": "Electronics",
     "description": "Clear sound with comfortable fit."
   },
@@ -43,7 +43,7 @@
     "id": "p1006",
     "name": "Desk Lamp (Warm Light)",
     "price": 24.5,
-    "image": "https://picsum.photos/seed/lamp/600/400",
+    "image": "https://i.pinimg.com/736x/23/fb/8c/23fb8c1a636ecc2dd9fbbc881aff6446.jpg",
     "category": "Home",
     "description": "Adjustable lamp for late-night work."
   }
