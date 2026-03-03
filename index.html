@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini E-Commerce</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <div class="brand">
+          <div class="brand__mark">ME</div>
+          <div class="brand__text">
+            <div class="brand__name">Mini E-Commerce</div>
+            <!-- <div class="brand__tag">AJAX products · jQuery cart</div> -->
+          </div>
+        </div>
+
+        <div class="topbar__actions">
+          <label class="search">
+            <span class="search__label">Search</span>
+            <input
+              id="searchInput"
+              class="search__input"
+              type="search"
+              placeholder="Type to filter products..."
+              autocomplete="off"
+            />
+          </label>
+
+          <button id="cartToggle" class="cartBtn" type="button" aria-controls="cartSidebar" aria-expanded="true">
+            Cart
+            <span id="cartCount" class="badge" aria-live="polite">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="catalog">
+        <div class="catalog__head">
+          <h2 class="catalog__title">Products</h2>
+          <div id="statusText" class="catalog__status" aria-live="polite"></div>
+        </div>
+
+        <div id="productGrid" class="grid" aria-live="polite"></div>
+      </section>
+
+      <aside id="cartSidebar" class="cart" aria-label="Shopping cart">
+        <div class="cart__head">
+          <h2 class="cart__title">Your Cart</h2>
+          <button id="clearCart" class="linkBtn" type="button">Clear</button>
+        </div>
+
+        <div id="cartItems" class="cart__items"></div>
+
+        <div class="cart__footer">
+          <div class="totalRow">
+            <span class="totalRow__label">Total</span>
+            <span id="cartTotal" class="totalRow__value">$0.00</span>
+          </div>
+          <button id="checkoutBtn" class="primaryBtn" type="button" disabled>Checkout</button>
+          <div class="hint">
+            Tip: run with a local server so AJAX can load <code>data/products.json</code>.
+          </div>
+        </div>
+
+        <div class="orders">
+          <div class="orders__head">
+            <h3 class="orders__title">Previous Orders</h3>
+            <button id="clearOrders" class="linkBtn" type="button">Clear</button>
+          </div>
+          <div id="ordersList" class="orders__list"></div>
+        </div>
+      </aside>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden>
+      <div class="toast__inner">
+        <div id="toastTitle" class="toast__title">Order placed</div>
+        <div id="toastMsg" class="toast__msg"></div>
+        <button id="toastClose" class="toast__close" type="button" aria-label="Close">✕</button>
+      </div>
+    </div>
+
+    <div id="checkoutModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle" hidden>
+      <div class="modal__overlay" data-close-modal="true"></div>
+      <div class="modal__panel">
+        <div class="modal__head">
+          <h2 id="checkoutTitle" class="modal__title">Checkout</h2>
+          <button id="closeCheckout" class="iconBtn" type="button" aria-label="Close checkout">✕</button>
+        </div>
+
+        <div class="modal__body">
+          <div class="modalGrid">
+            <section class="modalCard">
+              <div class="modalCard__title">Order summary</div>
+              <div id="checkoutSummary" class="summaryList"></div>
+
+              <div class="summaryTotals">
+                <div class="totalRow">
+                  <span class="totalRow__label">Total</span>
+                  <span id="checkoutTotal" class="totalRow__value">$0.00</span>
+                </div>
+              </div>
+            </section>
+
+            <form id="checkoutForm" class="modalCard">
+              <div class="modalCard__title">Your details</div>
+
+              <label class="field">
+                <span class="field__label">Full name</span>
+                <input id="checkoutName" class="field__input" name="name" type="text" required />
+              </label>
+
+              <label class="field">
+                <span class="field__label">Email</span>
+                <input id="checkoutEmail" class="field__input" name="email" type="email" required />
+              </label>
+
+              <label class="field">
+                <span class="field__label">Address</span>
+                <input id="checkoutAddress" class="field__input" name="address" type="text" required />
+              </label>
+
+              <label class="field">
+                <span class="field__label">Payment</span>
+                <select id="checkoutPayment" class="field__input" name="payment" required>
+                  <option value="card" selected>Credit/Debit Card (demo)</option>
+                  <option value="cod">Cash on delivery (demo)</option>
+                </select>
+              </label>
+
+              <div id="checkoutError" class="formError" role="alert" hidden></div>
+
+              <div class="modalActions">
+                <button id="cancelCheckout" class="ghostBtn" type="button">Cancel</button>
+                <button id="placeOrderBtn" class="primaryBtn" type="submit">Place order</button>
+              </div>
+
+              <div class="hint">This is a front-end demo: no real payment is processed.</div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <template id="productCardTpl">
+      <article class="card">
+        <div class="card__media">
+          <img class="card__img" alt="" loading="lazy" />
+        </div>
+        <div class="card__body">
+          <div class="card__top">
+            <h3 class="card__title"></h3>
+            <div class="card__price"></div>
+          </div>
+          <div class="card__meta"></div>
+          <p class="card__desc"></p>
+          <div class="card__actions">
+            <button class="primaryBtn addToCartBtn" type="button">Add to cart</button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <template id="cartItemTpl">
+      <div class="cartItem">
+        <div class="cartItem__main">
+          <div class="cartItem__name"></div>
+          <div class="cartItem__sub">
+            <span class="cartItem__qty"></span>
+            <span class="cartItem__dot">·</span>
+            <span class="cartItem__priceEach"></span>
+          </div>
+        </div>
+        <div class="cartItem__side">
+          <div class="cartItem__lineTotal"></div>
+          <button class="linkDanger removeFromCartBtn" type="button">Remove</button>
+        </div>
+      </div>
+    </template>
+
+    <template id="orderTpl">
+      <div class="order">
+        <div class="order__top">
+          <div class="order__id"></div>
+          <div class="order__total"></div>
+        </div>
+        <div class="order__meta"></div>
+        <div class="order__items"></div>
+      </div>
+    </template>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="./js/app.js"></script>
+  </body>
+</html>

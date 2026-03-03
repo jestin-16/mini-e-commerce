@@ -1,0 +1,50 @@
+[
+  {
+    "id": "p1001",
+    "name": "Classic White T-Shirt",
+    "price": 14.99,
+    "image": "https://i.pinimg.com/1200x/38/56/4d/38564d3f5eca633c7505d109e77048cd.jpg",
+    "category": "Apparel",
+    "description": "Soft cotton tee with a relaxed fit."
+  },
+  {
+    "id": "p1002",
+    "name": "Everyday Sneakers",
+    "price": 59.5,
+    "image": "https://i.pinimg.com/736x/bb/d4/8e/bbd48eb23c6dbad9220e9c3f792e0944.jpg",
+    "category": "Footwear",
+    "description": "Lightweight sneakers for daily wear."
+  },
+  {
+    "id": "p1003",
+    "name": "Minimalist Backpack",
+    "price": 39.0,
+    "image": "https://i.pinimg.com/1200x/81/7b/a7/817ba72ee954e50347e65c31349b9003.jpg",
+    "category": "Accessories",
+    "description": "Roomy backpack with a clean silhouette."
+  },
+  {
+    "id": "p1004",
+    "name": "Stainless Water Bottle",
+    "price": 19.75,
+    "image": "https://i.pinimg.com/736x/1e/49/5e/1e495ea3fe0464ccbab371bc1e075d20.jpg",
+    "category": "Home",
+    "description": "Keeps drinks cold or hot for hours."
+  },
+  {
+    "id": "p1005",
+    "name": "Noise-Isolating Earbuds",
+    "price": 29.99,
+    "image": "https://picsum.photos/seed/earbuds/600/400",
+    "category": "Electronics",
+    "description": "Clear sound with comfortable fit."
+  },
+  {
+    "id": "p1006",
+    "name": "Desk Lamp (Warm Light)",
+    "price": 24.5,
+    "image": "https://picsum.photos/seed/lamp/600/400",
+    "category": "Home",
+    "description": "Adjustable lamp for late-night work."
+  }
+]

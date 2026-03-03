@@ -1,0 +1,23 @@
+[
+  {
+    "id": "ME-ORDER-10001",
+    "placedAt": "2026-02-21T15:12:00.000Z",
+    "customerName": "Alex Morgan",
+    "payment": "card",
+    "items": [
+      { "productId": "p1001", "name": "Classic White T-Shirt", "price": 14.99, "qty": 2 },
+      { "productId": "p1004", "name": "Stainless Water Bottle", "price": 19.75, "qty": 1 }
+    ],
+    "total": 49.73
+  },
+  {
+    "id": "ME-ORDER-10002",
+    "placedAt": "2026-02-28T10:40:00.000Z",
+    "customerName": "Jamie Lee",
+    "payment": "cod",
+    "items": [
+      { "productId": "p1003", "name": "Minimalist Backpack", "price": 39, "qty": 1 }
+    ],
+    "total": 39
+  }
+]
