@@ -26,6 +26,11 @@ body {
   margin: 0;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
+  font-size: 15px;
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: page-fade-in 600ms ease-out forwards;
   background:
     radial-gradient(900px 380px at 18% 6%, rgba(124, 92, 255, 0.25), transparent 55%),
     radial-gradient(850px 380px at 70% 18%, rgba(53, 210, 255, 0.22), transparent 56%),
@@ -192,7 +197,7 @@ code {
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 18px;
 }
 
 .card {
@@ -200,16 +205,33 @@ code {
   background: rgba(255, 255, 255, 0.05);
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  animation: card-pop-in 420ms cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+  animation-delay: 120ms;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(124, 92, 255, 0.7);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
 }
 
 .card__media {
-  aspect-ratio: 3 / 2;
+  height: 220px; /* fixed height for all product images */
   background: rgba(255, 255, 255, 0.03);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
 }
 
 .card__img {
@@ -271,11 +293,16 @@ code {
   padding: 10px 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 120ms ease, filter 120ms ease;
+  transition:
+    transform 120ms ease,
+    filter 120ms ease,
+    box-shadow 120ms ease;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.42);
 }
 
 .primaryBtn:hover {
-  filter: brightness(1.04);
+  filter: brightness(1.05);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
 }
 
 .primaryBtn:active {
@@ -323,9 +350,14 @@ code {
   top: 86px;
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.05);
+  background:
+    linear-gradient(160deg, rgba(124, 92, 255, 0.25), transparent 55%),
+    rgba(8, 12, 28, 0.9);
   box-shadow: var(--shadow);
   overflow: hidden;
+  opacity: 0;
+  transform: translateX(12px);
+  animation: cart-slide-in 460ms ease-out 160ms forwards;
 }
 
 .cart__head {
@@ -351,6 +383,19 @@ code {
   min-height: 120px;
   max-height: calc(100vh - 240px);
   overflow: auto;
+}
+
+.cart__items::-webkit-scrollbar,
+.orders__list::-webkit-scrollbar,
+.summaryList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart__items::-webkit-scrollbar-thumb,
+.orders__list::-webkit-scrollbar-thumb,
+.summaryList::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
 }
 
 .cartItem {
@@ -508,6 +553,9 @@ code {
   grid-template-rows: auto auto;
   gap: 4px 10px;
   align-items: start;
+  transform: translateY(8px);
+  opacity: 0;
+  animation: toast-pop-in 260ms ease-out forwards;
 }
 
 .toast__title {
@@ -539,6 +587,44 @@ code {
   background: rgba(255, 255, 255, 0.09);
 }
 
+.card:nth-child(2) {
+  animation-delay: 170ms;
+}
+
+.card:nth-child(3) {
+  animation-delay: 220ms;
+}
+
+.card:nth-child(4) {
+  animation-delay: 260ms;
+}
+
+.card:nth-child(5) {
+  animation-delay: 300ms;
+}
+
+.card:nth-child(6) {
+  animation-delay: 340ms;
+}
+
+.card:nth-child(7) {
+  animation-delay: 380ms;
+}
+
+.card:nth-child(8) {
+  animation-delay: 420ms;
+}
+
+.card:nth-child(9) {
+  animation-delay: 460ms;
+}
+
+.orders__list .order {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: order-fade-in 260ms ease-out forwards;
+}
+
 .modal[hidden] {
   display: none;
 }
@@ -565,6 +651,9 @@ code {
   background: rgba(14, 20, 42, 0.92);
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.62);
   overflow: hidden;
+  transform: translateY(16px) scale(0.96);
+  opacity: 0;
+  animation: modal-pop-in 260ms cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
 }
 
 .modal__head {
@@ -716,6 +805,80 @@ code {
 
 .ghostBtn:hover {
   background: rgba(255, 255, 255, 0.09);
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-pop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cart-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modal-pop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+  65% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes order-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 1020px) {
