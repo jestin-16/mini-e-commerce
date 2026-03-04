@@ -94,6 +94,7 @@
 
     $cartCount.text(String(count));
     $cartTotal.text(money.format(total));
+    animateTotal();
     $checkoutBtn.prop("disabled", count === 0);
 
     $cartItems.empty();
@@ -114,12 +115,15 @@
       const node = tpl.content.cloneNode(true);
       const $node = $(node);
 
-      $node.find(".cartItem__name").text(product.name);
-      $node.find(".cartItem__qty").text(`Qty: ${qty}`);
-      $node.find(".cartItem__priceEach").text(`${money.format(Number(product.price || 0))} each`);
-      $node.find(".cartItem__lineTotal").text(money.format(lineTotal));
+      // root element for this item (we set data-product-id for delegation)
+      const $root = $node.find(".cart-item").attr("data-product-id", id);
 
-      $node.find(".removeFromCartBtn").attr("data-product-id", id);
+      $root.find(".cart-item-img").attr("src", product.image || "").attr("alt", product.name || "");
+      $root.find(".cart-item-title").text(product.name || "");
+      $root.find(".cart-item-price").text(money.format(Number(product.price || 0)) + " each");
+      $root.find(".qty-number").text(String(qty));
+      $root.find(".cart-item-lineTotal").text(money.format(lineTotal));
+      $root.find(".removeFromCartBtn").attr("data-product-id", id);
 
       $cartItems.append($node);
     }
@@ -129,17 +133,74 @@
     const p = allProducts.find((x) => x.id === productId);
     if (!p) return;
 
+    const existed = Boolean(cart[productId]);
     if (!cart[productId]) cart[productId] = { product: p, qty: 0 };
     cart[productId].qty += 1;
 
     renderCart();
+
+    // subtle pulse on cart badge
+    $cartCount.addClass("badge--pulse");
+    setTimeout(() => $cartCount.removeClass("badge--pulse"), 520);
+
+    // if item already existed, animate qty number briefly
+    if (existed) {
+      const $el = $cartItems.find(`[data-product-id="${productId}"]`).find('.qty-number');
+      if ($el.length) {
+        $el.addClass('qty-change');
+        setTimeout(() => $el.removeClass('qty-change'), 260);
+      }
+    }
+    // show toast for add
+    showCustomToast('success', `${p.name} added to cart`);
+
+    // refresh checkout view if open
+    if (!$checkoutModal.prop('hidden')) openCheckout();
   }
 
-  function removeFromCart(productId) {
+  // remove entire product from cart (animation + toast)
+function removeFromCart(productId) {
+    const entry = cart[productId];
+    if (!entry) return;
+    const name = entry.product?.name || 'Item';
+
+    const $row = $cartItems.find(`[data-product-id="${productId}"]`);
+    const finish = () => {
+        delete cart[productId];
+        renderCart();
+        showCustomToast('error', `${name} removed from cart`);
+        if (!$checkoutModal.prop('hidden')) openCheckout();
+    };
+
+    if ($row.length) {
+        $row.fadeOut(220, finish);
+    } else {
+        finish();
+    }
+}
+
+  function changeQty(productId, delta) {
     if (!cart[productId]) return;
-    cart[productId].qty -= 1;
-    if (cart[productId].qty <= 0) delete cart[productId];
+    const next = Number(cart[productId].qty || 0) + Number(delta || 0);
+    if (next <= 0) {
+      // delegate full removal to removeFromCart (handles toast once)
+      removeFromCart(productId);
+      return;
+    }
+    cart[productId].qty = next;
     renderCart();
+
+    // small highlight on the qty number
+    const $el = $cartItems.find(`[data-product-id="${productId}"]`).find('.qty-number');
+    if ($el.length) {
+      $el.addClass('qty-change');
+      setTimeout(() => $el.removeClass('qty-change'), 260);
+    }
+    // show update toast
+    const name = cart[productId].product?.name || 'Item';
+    showCustomToast('info', `${name} quantity updated`);
+
+    if (!$checkoutModal.prop('hidden')) openCheckout();
   }
 
   function clearCart() {
@@ -198,9 +259,9 @@
       const itemCount = Array.isArray(o.items) ? o.items.reduce((acc, it) => acc + Number(it.qty || 0), 0) : 0;
       const itemNames = Array.isArray(o.items)
         ? o.items
-            .slice(0, 3)
-            .map((it) => `${it.name} ×${it.qty}`)
-            .join(", ")
+          .slice(0, 3)
+          .map((it) => `${it.name} ×${it.qty}`)
+          .join(", ")
         : "";
       const more = Array.isArray(o.items) && o.items.length > 3 ? ` +${o.items.length - 3} more` : "";
 
@@ -254,6 +315,43 @@
     }, 4500);
   }
 
+  // Custom toast system (bottom-right modern toasts)
+  // dedupe last custom toast message to avoid duplicates
+  let _lastToast = { msg: '', time: 0 };
+  function showCustomToast(type, message, timeout = 3000) {
+    // ignore if same message shown very recently
+    const now = Date.now();
+    if (message === _lastToast.msg && now - _lastToast.time < 600) {
+      return;
+    }
+    _lastToast = { msg: message, time: now };
+
+    const $container = $("#customToastContainer");
+    if (!$container.length) return;
+
+    const klass = `custom-toast ${type || 'info'}`;
+    const $t = $("<div/>", { class: klass, text: message });
+
+    $container.append($t);
+
+    // auto remove
+    const tid = window.setTimeout(() => {
+      $t.fadeOut(260, () => $t.remove());
+      window.clearTimeout(tid);
+    }, timeout);
+
+    // click to dismiss
+    $t.on('click', () => {
+      $t.remove();
+      window.clearTimeout(tid);
+    });
+  }
+
+  function animateTotal() {
+    $cartTotal.addClass('total-pulse');
+    setTimeout(() => $cartTotal.removeClass('total-pulse'), 420);
+  }
+
   function clearOrders() {
     setStoredOrders([]);
     // keep JSON-loaded base orders, but hide locally stored ones
@@ -271,28 +369,34 @@
       const { product, qty } = cart[id];
       const lineTotal = qty * Number(product.price || 0);
 
-      $checkoutSummary.append(
-        $("<div/>", { class: "summaryItem" }).append(
-          $("<div/>").append(
-            $("<div/>", { class: "summaryItem__name", text: product.name }),
-            $("<div/>", {
-              class: "summaryItem__meta",
-              text: `Qty: ${qty} · ${money.format(Number(product.price || 0))} each`,
-            })
-          ),
-          $("<div/>", { class: "summaryItem__name", text: money.format(lineTotal) })
-        )
+      const $item = $("<div/>", { class: 'checkout-item', 'data-product-id': id }).append(
+        $("<img/>", { class: 'checkout-img', src: product.image || '', alt: product.name || '' }),
+        $("<div/>", { class: 'checkout-details' }).append(
+          $("<h6/>", { text: product.name }),
+          $("<div/>", { text: money.format(Number(product.price || 0)) }),
+          $("<div/>", { class: 'qty-controls' }).append(
+            $("<button/>", { class: 'qty-minus', type: 'button', text: '−' }),
+            $("<span/>", { class: 'qty-value', text: String(qty) }),
+            $("<button/>", { class: 'qty-plus', type: 'button', text: '+' })
+          )
+        ),
+        $("<div/>", { class: 'checkout-lineTotal', text: money.format(lineTotal) })
       );
+
+      $checkoutSummary.append($item);
     }
 
     $checkoutTotal.text(money.format(total));
     $checkoutError.prop("hidden", true).text("");
     $checkoutModal.prop("hidden", false);
+    // prevent background scroll and focus
+    $(document.body).addClass('modal-open');
     $("#checkoutName").trigger("focus");
   }
 
   function closeCheckout() {
     $checkoutModal.prop("hidden", true);
+    $(document.body).removeClass('modal-open');
   }
 
   function showCheckoutError(message) {
@@ -344,7 +448,7 @@
     clearCart();
     closeCheckout();
     setStatus(`Order ${orderId} placed · Total ${money.format(total)}`);
-    showToast("Order placed", `${orderId} · ${money.format(total)} · Thanks, ${name}!`);
+    showCustomToast('success', 'Order placed successfully!');
   }
 
   function filterProducts(query) {
@@ -393,6 +497,19 @@
       removeFromCart(id);
     });
 
+    // Quantity controls (delegated for dynamic items)
+    $(document).on("click", ".qty-plus", function () {
+      const id = String($(this).closest("[data-product-id]").attr("data-product-id") || "");
+      if (!id) return;
+      changeQty(id, 1);
+    });
+
+    $(document).on("click", ".qty-minus", function () {
+      const id = String($(this).closest("[data-product-id]").attr("data-product-id") || "");
+      if (!id) return;
+      changeQty(id, -1);
+    });
+
     $clearCart.on("click", () => clearCart());
 
     $checkoutBtn.on("click", () => openCheckout());
@@ -421,17 +538,81 @@
 
     $("#cartToggle").on("click", function () {
       const $sidebar = $("#cartSidebar");
-      const isHidden = $sidebar.is(":hidden");
-      $sidebar.toggle(isHidden);
-      $(this).attr("aria-expanded", String(isHidden));
+      $sidebar.toggleClass("cart--hidden");
+      const expanded = !$sidebar.hasClass("cart--hidden");
+      $(this).attr("aria-expanded", String(expanded));
     });
   }
 
   $(function () {
     wireEvents();
     renderCart();
+    // start hidden so toggle works consistently on mobile/desktop
+    $("#cartSidebar").addClass("cart--hidden");
     loadProducts();
     loadOrders();
+
+    // Smooth navbar shrink on scroll
+    $(window).on("scroll", function () {
+      if ($(window).scrollTop() > 50) {
+        $(".topbar").addClass("scrolled");
+      } else {
+        $(".topbar").removeClass("scrolled");
+      }
+    });
+
+    // Scroll reveal fade-up animation via IntersectionObserver
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            $(entry.target).addClass("active");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    // Initial reveal elements
+    $(".reveal-up").each(function () {
+      observer.observe(this);
+    });
+
+    // Observe newly added cards to fade-in
+    const mutObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mut) => {
+        mut.addedNodes.forEach((node) => {
+          if (node.nodeType === 1 && $(node).hasClass("card")) {
+            $(node).addClass("reveal-up");
+            observer.observe(node);
+          }
+        });
+      });
+    });
+    const gridEl = document.getElementById("productGrid");
+    if (gridEl) mutObserver.observe(gridEl, { childList: true });
+
+    // Button ripple effect
+    $(document).on("mousedown", ".primaryBtn, .ghostBtn, .cartBtn", function (e) {
+      const $btn = $(this);
+      const radius = Math.max($btn.outerWidth(), $btn.outerHeight());
+      const offset = $btn.offset();
+      const x = e.pageX - offset.left - radius / 2;
+      const y = e.pageY - offset.top - radius / 2;
+
+      const $ripple = $("<span class='ripple'></span>");
+      $ripple.css({
+        width: radius,
+        height: radius,
+        top: y + "px",
+        left: x + "px"
+      });
+
+      $btn.append($ripple);
+      setTimeout(() => {
+        $ripple.remove();
+      }, 600);
+    });
   });
 })();
-
