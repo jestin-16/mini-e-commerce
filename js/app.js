@@ -34,10 +34,12 @@
   /** @type {number | null} */
   let toastTimer = null;
 
+  // Updates the status text above the product grid (e.g. loading, counts, confirmations).
   function setStatus(text) {
     $status.text(text || "");
   }
 
+  // Calculates total item count and cart total price from the in‑memory cart object.
   function cartSummary() {
     const ids = Object.keys(cart);
     let count = 0;
@@ -52,6 +54,7 @@
     return { itemIds: ids, count, total };
   }
 
+  // Renders the product cards into the grid using the product template.
   function renderProducts(products) {
     $grid.empty();
 
@@ -89,6 +92,7 @@
     }
   }
 
+  // Renders the cart sidebar items, count, and total price from the cart state.
   function renderCart() {
     const { itemIds, count, total } = cartSummary();
 
@@ -125,6 +129,7 @@
     }
   }
 
+  // Adds a product to the cart (or increments quantity) and re-renders the cart.
   function addToCart(productId) {
     const p = allProducts.find((x) => x.id === productId);
     if (!p) return;
@@ -135,6 +140,7 @@
     renderCart();
   }
 
+  // Decrements a product quantity in the cart (or removes it when it reaches zero).
   function removeFromCart(productId) {
     if (!cart[productId]) return;
     cart[productId].qty -= 1;
@@ -142,11 +148,13 @@
     renderCart();
   }
 
+  // Empties the entire cart and refreshes the cart sidebar UI.
   function clearCart() {
     for (const id of Object.keys(cart)) delete cart[id];
     renderCart();
   }
 
+  // Safely parses JSON, returning a fallback value if parsing fails.
   function safeJsonParse(text, fallback) {
     try {
       return JSON.parse(text);
@@ -155,12 +163,14 @@
     }
   }
 
+  // Reads locally stored orders from localStorage.
   function getStoredOrders() {
     const raw = localStorage.getItem("me_orders");
     const parsed = safeJsonParse(raw || "[]", []);
     return Array.isArray(parsed) ? parsed : [];
   }
 
+  // Persists the given list of orders to localStorage.
   function setStoredOrders(nextOrders) {
     try {
       localStorage.setItem("me_orders", JSON.stringify(nextOrders));
@@ -169,6 +179,7 @@
     }
   }
 
+  // Merges orders from the JSON file and localStorage, de-duplicating by ID and sorting by date.
   function mergeOrders(baseOrders, storedOrders) {
     const byId = new Map();
     for (const o of baseOrders || []) {
@@ -182,6 +193,7 @@
     return merged;
   }
 
+  // Renders the "Previous Orders" list in the cart sidebar.
   function renderOrders() {
     $ordersList.empty();
 
@@ -218,6 +230,7 @@
     }
   }
 
+  // Loads previous orders via AJAX from orders.json, merges with localStorage, and renders them.
   function loadOrders() {
     return $.ajax({
       url: "./data/orders.json",
@@ -238,6 +251,7 @@
       });
   }
 
+  // Shows a temporary toast notification with a title and message.
   function showToast(title, message) {
     if (toastTimer) {
       window.clearTimeout(toastTimer);
@@ -254,6 +268,7 @@
     }, 4500);
   }
 
+  // Clears locally stored orders and refreshes the previous orders list.
   function clearOrders() {
     setStoredOrders([]);
     // keep JSON-loaded base orders, but hide locally stored ones
@@ -261,6 +276,7 @@
     showToast("Orders cleared", "Locally saved order history was cleared.");
   }
 
+  // Opens the checkout modal and fills the order summary based on the current cart.
   function openCheckout() {
     const { itemIds, count, total } = cartSummary();
     if (count === 0) return;
@@ -291,14 +307,17 @@
     $("#checkoutName").trigger("focus");
   }
 
+  // Closes the checkout modal.
   function closeCheckout() {
     $checkoutModal.prop("hidden", true);
   }
 
+  // Displays a validation error message inside the checkout form.
   function showCheckoutError(message) {
     $checkoutError.text(message).prop("hidden", !message);
   }
 
+  // Validates checkout form data, creates a new order, saves it, clears the cart, and shows feedback.
   function placeOrder() {
     const { count, total } = cartSummary();
     if (count === 0) {
@@ -347,6 +366,7 @@
     showToast("Order placed", `${orderId} · ${money.format(total)} · Thanks, ${name}!`);
   }
 
+  // Filters products using the search query against name, category, and description.
   function filterProducts(query) {
     const q = (query || "").trim().toLowerCase();
     if (!q) return allProducts;
@@ -357,6 +377,7 @@
     });
   }
 
+  // Loads product data from products.json via AJAX and renders product cards.
   function loadProducts() {
     setStatus("Loading products…");
 
@@ -382,6 +403,7 @@
       });
   }
 
+  // Wires up all DOM event handlers (add/remove cart, checkout, search, toggles, etc.).
   function wireEvents() {
     $grid.on("click", ".addToCartBtn", function () {
       const id = String($(this).attr("data-product-id") || "");
