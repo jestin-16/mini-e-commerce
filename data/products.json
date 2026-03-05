@@ -46,5 +46,21 @@
     "image": "https://i.pinimg.com/736x/23/fb/8c/23fb8c1a636ecc2dd9fbbc881aff6446.jpg",
     "category": "Home",
     "description": "Adjustable lamp for late-night work."
-  }
+  },
+{
+  "id":"p1007",
+  "name":"Leather Desk Mat",
+  "price":60.99,
+  "image":"https://i.etsystatic.com/17886846/r/il/ff0ff0/7183606589/il_1588xN.7183606589_oujr.jpg",
+  "category":"Accessories",
+  "description":"Personalized Blue Leather Desk Mat: Large Handmade Mousepad"
+},
+{
+  "id":"p1008",
+  "name":"Water-Repellent Chest Bag",
+  "price":49.99,
+  "image":"https://i.etsystatic.com/62435379/r/il/ef89ed/7507365534/il_1588xN.7507365534_q2cs.jpg",
+  "category":"Accessories",
+  "description":"Compact Crossbody Bag with Anti-Theft Pocket for Commuting Travel"
+}
 ]
