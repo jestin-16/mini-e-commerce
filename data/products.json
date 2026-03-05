@@ -53,7 +53,7 @@
   "price":60.99,
   "image":"https://i.etsystatic.com/17886846/r/il/ff0ff0/7183606589/il_1588xN.7183606589_oujr.jpg",
   "category":"Accessories",
-  "description":"Personalized Blue Leather Desk Mat: Large Handmade Mousepad"
+  "description":"Premium leather desk mat that protects your workspace and adds a sleek, professional look."
 },
 {
   "id":"p1008",
@@ -61,7 +61,7 @@
   "price":49.99,
   "image":"https://i.etsystatic.com/62435379/r/il/ef89ed/7507365534/il_1588xN.7507365534_q2cs.jpg",
   "category":"Accessories",
-  "description":"Compact Crossbody Bag with Anti-Theft Pocket for Commuting Travel"
+  "description":"Compact crossbody bag with water-repellent fabric and secure pockets for everyday travel."
 },
 {
   "id":"p1009",
@@ -69,7 +69,7 @@
   "price":25.99,
   "image":"https://i.pinimg.com/1200x/f2/20/24/f220245011909dc82422dcb2376a54cd.jpg",
   "category":"Office",
-  "description":"Desk Organizer • Minimalist desk storage • Wooden organizer"
+  "description":"Minimalist wooden organizer that keeps your desk tidy and essentials within reach."
 },
 {
   "id":"p1010",
@@ -77,6 +77,22 @@
   "price":49.99,
   "image":"https://i.pinimg.com/1200x/83/2e/56/832e56769a946bfe04e050ee04f3ebb8.jpg",
   "category":"Home",
-  "description":"Large Digital Wall Clock Temp Date Week Display Remote Control Power Off Memory"
+  "description":"Large digital clock with clear display showing time, date, and temperature."
+},
+{
+  "id":"p1011",
+  "name":"Retro Bluetooth Speaker",
+  "price":120.99,
+  "image":"https://i.pinimg.com/1200x/ac/cb/ec/accbecfd46cf0d1bc8ca9757ee6fb1c9.jpg",
+  "category":"Electronics",
+  "description":"Vintage charm paired with rich, room-filling sound for a nostalgic listening experience."
+},
+{
+  "id":"p1012",
+  "name":"Ergonomic Chair",
+  "price":249.99,
+  "image":"https://i.pinimg.com/736x/21/45/e3/2145e3560a4cc9467e9de1a17767ba16.jpg",
+  "category":"Furniture",
+  "description":"Designed for all-day comfort with supportive cushioning and posture-friendly ergonomics."
 }
 ]
