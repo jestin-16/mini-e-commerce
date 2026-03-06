@@ -94,5 +94,29 @@
   "image":"https://i.pinimg.com/736x/21/45/e3/2145e3560a4cc9467e9de1a17767ba16.jpg",
   "category":"Furniture",
   "description":"Designed for all-day comfort with supportive cushioning and posture-friendly ergonomics."
+},
+{
+  "id":"p1013",
+  "name":"Eilik – an Interactive Robot ",
+  "price":569.99,
+  "image":"https://i.pinimg.com/1200x/42/27/b9/4227b9fe4ccbed1ac08cd087388aae70.jpg",
+  "category":"Electronics",
+  "description":"Cute interactive desk companion that expresses emotions, responds to touch and movement, and playfully interacts with users and other Eilik robots to create a fun and engaging experience."
+},
+{
+  "id":"p1014",
+  "name":"Pastel Green Gradient Mechanical Keyboard",
+  "price":129.99,
+  "image":"https://i.pinimg.com/736x/dc/67/de/dc67dea61980b30e45eceadc916dd357.jpg",
+  "category":"Electronics",
+  "description":"Aesthetic mechanical keyboard with satisfying tactile feedback and a beautiful pastel green gradient finish."
+},
+{
+  "id":"p1015",
+  "name":"24-Inch Business Trolley Suitcase ",
+  "price":149.99,
+  "image":"https://i.pinimg.com/1200x/8f/d6/79/8fd679939688719c915148f420f37ac2.jpg",
+  "category":"Accessories",
+  "description":"Durable and stylish trolley suitcase perfect for business travel with smooth-rolling wheels and organized compartments."
 }
 ]
