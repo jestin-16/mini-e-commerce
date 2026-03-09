@@ -127,4 +127,21 @@
   "category":"Home",
   "description":"Enhances comfort by adding cool, refreshing moisture to dry indoor air ."
 }
+{
+  "id":"p1017",
+  "name":"Cutlery Set(4pc)",
+  "price":600,
+  "image":"https://i.pinimg.com/736x/17/70/c2/1770c2a23799df450853a4471e4173fe.jpg",
+  "category":"Home",
+  "description":"Crafted for comfort and style to make every meal feel special."
+},
+{
+  "id":"p1018",
+  "name":"Premium Portable Safety Food Scissors",
+  "price":600,
+  "image":"https://i.pinimg.com/474x/bb/67/0b/bb670bdbbdef780799ee5f29c6bbba5f.jpg",
+  "category":"Home",
+  "description":"Compact safety scissors designed for quick and precise food cutting on the go."
+}
+
 ]
