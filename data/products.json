@@ -105,11 +105,11 @@
 },
 {
   "id":"p1014",
-  "name":"Pastel Green Gradient Mechanical Keyboard",
+  "name":"Starry sky theme Mechanical Keyboard",
   "price":129.99,
-  "image":"https://i.pinimg.com/736x/dc/67/de/dc67dea61980b30e45eceadc916dd357.jpg",
+  "image":"https://i.pinimg.com/1200x/18/fd/43/18fd43015570722823f0e15085257969.jpg",
   "category":"Electronics",
-  "description":"Aesthetic mechanical keyboard with satisfying tactile feedback and a beautiful pastel green gradient finish."
+  "description":"Aesthetic mechanical keyboard with satisfying tactile feedback and a beautiful starry sky theme finish."
 },
 {
   "id":"p1015",
@@ -118,5 +118,13 @@
   "image":"https://i.pinimg.com/1200x/8f/d6/79/8fd679939688719c915148f420f37ac2.jpg",
   "category":"Accessories",
   "description":"Durable and stylish trolley suitcase perfect for business travel with smooth-rolling wheels and organized compartments."
+},
+{
+  "id":"p1016",
+  "name":"Humidifier",
+  "price":600,
+  "image":"https://i.pinimg.com/736x/55/05/92/5505929b7a5e2b8f8db6380493c72d38.jpg",
+  "category":"Home",
+  "description":"Enhances comfort by adding cool, refreshing moisture to dry indoor air ."
 }
 ]
